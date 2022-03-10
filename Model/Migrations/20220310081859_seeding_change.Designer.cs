@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Model.Entities;
 
 namespace Model.Migrations
 {
     [DbContext(typeof(EFOpleidingenContext))]
-    partial class EFOpleidingenContextModelSnapshot : ModelSnapshot
+    [Migration("20220310081859_seeding_change")]
+    partial class seeding_change
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,10 +28,23 @@ namespace Model.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Gemeente")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Huisnummer")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Naam")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("CampusNaam");
+
+                    b.Property<string>("Postcode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Straat")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CampusId");
 
@@ -39,32 +54,56 @@ namespace Model.Migrations
                         new
                         {
                             CampusId = 1,
-                            Naam = "Andros"
+                            Gemeente = "Antwerpen",
+                            Huisnummer = "22",
+                            Naam = "Andros",
+                            Postcode = "2018",
+                            Straat = "Somersstraat"
                         },
                         new
                         {
                             CampusId = 2,
-                            Naam = "Lorem Ipsum"
+                            Gemeente = "Dendermonde",
+                            Huisnummer = "17",
+                            Naam = "Lorem Ipsum",
+                            Postcode = "9200",
+                            Straat = "Oude Vest"
                         },
                         new
                         {
                             CampusId = 3,
-                            Naam = "Gavdos"
+                            Gemeente = "Genk",
+                            Huisnummer = "37",
+                            Naam = "Gavdos",
+                            Postcode = "3600",
+                            Straat = "Europalaan"
                         },
                         new
                         {
                             CampusId = 4,
-                            Naam = "Hydra"
+                            Gemeente = "Heverlee",
+                            Huisnummer = "2",
+                            Naam = "Hydra",
+                            Postcode = "3001",
+                            Straat = "Interleuvenlaan"
                         },
                         new
                         {
                             CampusId = 5,
-                            Naam = "Ikaria"
+                            Gemeente = "Wevelgem",
+                            Huisnummer = "10",
+                            Naam = "Ikaria",
+                            Postcode = "8560",
+                            Straat = "Vlamingstraat"
                         },
                         new
                         {
                             CampusId = 6,
-                            Naam = "Oinouses"
+                            Gemeente = "Oostende",
+                            Huisnummer = "4",
+                            Naam = "Oinouses",
+                            Postcode = "8400",
+                            Straat = "Akkerstraat"
                         });
                 });
 
@@ -3761,124 +3800,6 @@ namespace Model.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Model.Entities.TPHCursus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Cursustype")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Naam")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TPHCursussen");
-
-                    b.HasDiscriminator<string>("Cursustype").HasValue("TPHCursus");
-                });
-
-            modelBuilder.Entity("Model.Entities.TPTCursus", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Naam")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("TPTCursussen");
-                });
-
-            modelBuilder.Entity("Model.Entities.TPHKlassikaleCursus", b =>
-                {
-                    b.HasBaseType("Model.Entities.TPHCursus");
-
-                    b.Property<DateTime>("Tot")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Van")
-                        .HasColumnType("datetime2");
-
-                    b.HasDiscriminator().HasValue("K");
-                });
-
-            modelBuilder.Entity("Model.Entities.TPHZelfstudieCursus", b =>
-                {
-                    b.HasBaseType("Model.Entities.TPHCursus");
-
-                    b.Property<int>("AantalDagen")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("Z");
-                });
-
-            modelBuilder.Entity("Model.Entities.TPTKlassikaleCursus", b =>
-                {
-                    b.HasBaseType("Model.Entities.TPTCursus");
-
-                    b.Property<DateTime>("Tot")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Van")
-                        .HasColumnType("datetime2");
-
-                    b.ToTable("TPTKlassikaleCursussen");
-                });
-
-            modelBuilder.Entity("Model.Entities.TPTZelfstudieCursus", b =>
-                {
-                    b.HasBaseType("Model.Entities.TPTCursus");
-
-                    b.Property<int>("AantalDagen")
-                        .HasColumnType("int");
-
-                    b.ToTable("TPTZelfstudieCursussen");
-                });
-
-            modelBuilder.Entity("Model.Entities.Campus", b =>
-                {
-                    b.OwnsOne("Model.Entities.Adres", "Adres", b1 =>
-                        {
-                            b1.Property<int>("CampusId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                            b1.Property<string>("Gemeente")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("Gemeente");
-
-                            b1.Property<string>("Huisnummer")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("HuisNr");
-
-                            b1.Property<string>("Postcode")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PostCd");
-
-                            b1.Property<string>("Straat")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("Straat");
-
-                            b1.HasKey("CampusId");
-
-                            b1.ToTable("Campussen");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CampusId");
-                        });
-
-                    b.Navigation("Adres");
-                });
-
             modelBuilder.Entity("Model.Entities.Docent", b =>
                 {
                     b.HasOne("Model.Entities.Campus", "Campus")
@@ -3891,93 +3812,9 @@ namespace Model.Migrations
                         .WithMany("Docenten")
                         .HasForeignKey("LandCode");
 
-                    b.OwnsOne("Model.Entities.Adres", "ThuisAdres", b1 =>
-                        {
-                            b1.Property<int>("DocentId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                            b1.Property<string>("Gemeente")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("GemeenteThuis");
-
-                            b1.Property<string>("Huisnummer")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("HuisNrThuis");
-
-                            b1.Property<string>("Postcode")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PostCdThuis");
-
-                            b1.Property<string>("Straat")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("StraatThuis");
-
-                            b1.HasKey("DocentId");
-
-                            b1.ToTable("Docenten");
-
-                            b1.WithOwner()
-                                .HasForeignKey("DocentId");
-                        });
-
-                    b.OwnsOne("Model.Entities.Adres", "VerblijfAdres", b1 =>
-                        {
-                            b1.Property<int>("DocentId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                            b1.Property<string>("Gemeente")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("GemeenteVerblijf");
-
-                            b1.Property<string>("Huisnummer")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("HuisNrVerblijf");
-
-                            b1.Property<string>("Postcode")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PostCdVerblijf");
-
-                            b1.Property<string>("Straat")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("StraatVerblijf");
-
-                            b1.HasKey("DocentId");
-
-                            b1.ToTable("Docenten");
-
-                            b1.WithOwner()
-                                .HasForeignKey("DocentId");
-                        });
-
                     b.Navigation("Campus");
 
                     b.Navigation("Land");
-
-                    b.Navigation("ThuisAdres");
-
-                    b.Navigation("VerblijfAdres");
-                });
-
-            modelBuilder.Entity("Model.Entities.TPTKlassikaleCursus", b =>
-                {
-                    b.HasOne("Model.Entities.TPTCursus", null)
-                        .WithOne()
-                        .HasForeignKey("Model.Entities.TPTKlassikaleCursus", "ID")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Model.Entities.TPTZelfstudieCursus", b =>
-                {
-                    b.HasOne("Model.Entities.TPTCursus", null)
-                        .WithOne()
-                        .HasForeignKey("Model.Entities.TPTZelfstudieCursus", "ID")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Model.Entities.Campus", b =>

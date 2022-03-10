@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Model.Entities;
 
 namespace Model.Migrations
 {
     [DbContext(typeof(EFOpleidingenContext))]
-    partial class EFOpleidingenContextModelSnapshot : ModelSnapshot
+    [Migration("20220310121219_tph")]
+    partial class tph
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3768,7 +3770,7 @@ namespace Model.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Cursustype")
+                    b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -3779,22 +3781,7 @@ namespace Model.Migrations
 
                     b.ToTable("TPHCursussen");
 
-                    b.HasDiscriminator<string>("Cursustype").HasValue("TPHCursus");
-                });
-
-            modelBuilder.Entity("Model.Entities.TPTCursus", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Naam")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("TPTCursussen");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("TPHCursus");
                 });
 
             modelBuilder.Entity("Model.Entities.TPHKlassikaleCursus", b =>
@@ -3807,7 +3794,7 @@ namespace Model.Migrations
                     b.Property<DateTime>("Van")
                         .HasColumnType("datetime2");
 
-                    b.HasDiscriminator().HasValue("K");
+                    b.HasDiscriminator().HasValue("TPHKlassikaleCursus");
                 });
 
             modelBuilder.Entity("Model.Entities.TPHZelfstudieCursus", b =>
@@ -3817,30 +3804,7 @@ namespace Model.Migrations
                     b.Property<int>("AantalDagen")
                         .HasColumnType("int");
 
-                    b.HasDiscriminator().HasValue("Z");
-                });
-
-            modelBuilder.Entity("Model.Entities.TPTKlassikaleCursus", b =>
-                {
-                    b.HasBaseType("Model.Entities.TPTCursus");
-
-                    b.Property<DateTime>("Tot")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Van")
-                        .HasColumnType("datetime2");
-
-                    b.ToTable("TPTKlassikaleCursussen");
-                });
-
-            modelBuilder.Entity("Model.Entities.TPTZelfstudieCursus", b =>
-                {
-                    b.HasBaseType("Model.Entities.TPTCursus");
-
-                    b.Property<int>("AantalDagen")
-                        .HasColumnType("int");
-
-                    b.ToTable("TPTZelfstudieCursussen");
+                    b.HasDiscriminator().HasValue("TPHZelfstudieCursus");
                 });
 
             modelBuilder.Entity("Model.Entities.Campus", b =>
@@ -3960,24 +3924,6 @@ namespace Model.Migrations
                     b.Navigation("ThuisAdres");
 
                     b.Navigation("VerblijfAdres");
-                });
-
-            modelBuilder.Entity("Model.Entities.TPTKlassikaleCursus", b =>
-                {
-                    b.HasOne("Model.Entities.TPTCursus", null)
-                        .WithOne()
-                        .HasForeignKey("Model.Entities.TPTKlassikaleCursus", "ID")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Model.Entities.TPTZelfstudieCursus", b =>
-                {
-                    b.HasOne("Model.Entities.TPTCursus", null)
-                        .WithOne()
-                        .HasForeignKey("Model.Entities.TPTZelfstudieCursus", "ID")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Model.Entities.Campus", b =>
